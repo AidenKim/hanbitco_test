@@ -17,7 +17,7 @@ public class JsonUtil {
 	public static JsonObject getJsonObjectFromString(String str){
 		return new Gson().fromJson(str, JsonObject.class);
 	}
-	public static JsonObject getObjectFromJsonObject(JsonElement jEle){
+	public static Object getObjectFromJsonObject(JsonElement jEle){
 		return new Gson().fromJson(jEle, Object.class);
 	}
 }
