@@ -37,22 +37,16 @@ public class CurrencySvcImpl implements CurrencySvc{
 		try {
 			
 			JsonObject jObj = JsonUtil.getJsonObjectFromString(currencyDao.getPrice());
-			if(jObj.isJsonArray()){
-				logger.error("rtnObj.isJsonArray() : "+rtnObj.isJsonArray());
-			}
-			if(jObj.isJsonObject()){
-				logger.error("rtnObj.isJsonObject() : "+rtnObj.isJsonObject());
-			}
 			
 			//1. get the right currency
 			//2. get only the originPair and last price => getSomeInfoFromTrade
 			JsonElement jData;
 			if(currencyList.length==1){
-				jData = getSomeInfoFromTrade(jObj.get(currencyList[0]+"_KRW"));
+				jData = getSomeInfoFromTradeCenter(jObj.get(currencyList[0]+"_KRW"));
 			} else{
 				jData = new JsonObject();
 				for(String cur : currencyList){
-					((JsonObject) jData).add(cur, getSomeInfoFromTrade(jObj.get(cur)));
+					((JsonObject) jData).add(cur, getSomeInfoFromTradeCenter(jObj.get(cur)));
 				}
 			}
 			
@@ -67,7 +61,7 @@ public class CurrencySvcImpl implements CurrencySvc{
 		return JsonUtil.getObjectFromJsonObject(rtnObj);
 	}
 	
-	public JsonElement getSomeInfoFromTrade(JsonElement jEle,String[] someInfo){
+	public JsonElement getSomeInfoFromTradeCenter(JsonElement jEle,String[] someInfo){
 		someInfo = someInfo.length == 0 ? null : someInfo; //null or all
 		if(jEle.isJsonObject() && someInfo != null){
 			for(Entry<String, JsonElement> jse : jEle.getAsJsonObject().entrySet()){
@@ -83,7 +77,7 @@ public class CurrencySvcImpl implements CurrencySvc{
 		return jEle;
 	}
 	
-	public JsonElement getSomeInfoFromTrade(JsonElement jEle){ 
-		return getSomeInfoFromTrade(jEle, defaultInfoFromTC);
+	public JsonElement getSomeInfoFromTradeCenter(JsonElement jEle){ 
+		return getSomeInfoFromTradeCenter(jEle, defaultInfoFromTC);
 	}
 }
